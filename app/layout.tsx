@@ -3,22 +3,23 @@ import type { ReactNode } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Que os Caminhos se Cruzem | Para Mariana",
-  description: "Uma historia de amor, amadurecimento e transformacao construida especialmente para Mariana.",
+  title: "Toda mudança tem um começo.",
+  description:
+    "Um presente mais do que especial para Mariana, feito como uma demonstração de amor e carinho.",
   keywords: ["amor", "Mariana", "historia", "dia dos namorados"],
   authors: [{ name: "Winicius Augusto" }],
   openGraph: {
-    title: "Que os Caminhos se Cruzem",
-    description: "Uma capsula do tempo emocional feita para Mariana.",
-    images: ["/photos/og-image.png"],
+    title: "Toda mudança tem um começo.",
+    description: "Um presente mais do que especial para Mariana.",
+    images: ["/photos/chapter-11/formatura.jpg"],
     type: "website",
     locale: "pt_BR"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Que os Caminhos se Cruzem",
-    description: "Uma historia de amor, amadurecimento e transformacao.",
-    images: ["/photos/og-image.png"]
+    title: "Toda mudança tem um começo.",
+    description: "Um presente mais do que especial para Mariana.",
+    images: ["/photos/chapter-11/formatura.jpg"]
   },
   robots: { index: false, follow: false }
 }
