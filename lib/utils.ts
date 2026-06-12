@@ -1,0 +1,11 @@
+export function cx(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ")
+}
+
+export function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
+export function splitWords(text: string) {
+  return text.split(" ").filter(Boolean)
+}
