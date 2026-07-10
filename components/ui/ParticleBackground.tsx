@@ -32,15 +32,19 @@ export default function ParticleBackground({
     if (!ctx) return
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const lightMode =
+      window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 820
+
     const particles: Particle[] = []
     let frame = 0
     let raf = 0
+    let running = false
 
     const color =
       variant === "rose" ? "232, 180, 184" : variant === "stars" ? "255, 248, 231" : "201, 169, 110"
 
     function resize() {
-      const ratio = window.devicePixelRatio || 1
+      const ratio = Math.min(window.devicePixelRatio || 1, lightMode ? 1.5 : 2)
       const rect = canvas.getBoundingClientRect()
       canvas.width = rect.width * ratio
       canvas.height = rect.height * ratio
@@ -50,7 +54,8 @@ export default function ParticleBackground({
     function seed() {
       particles.length = 0
       const rect = canvas.getBoundingClientRect()
-      const total = reduceMotion ? Math.max(18, Math.floor(density / 4)) : density
+      let total = reduceMotion ? Math.max(14, Math.floor(density / 4)) : density
+      if (lightMode) total = Math.max(12, Math.floor(total * 0.3))
       for (let i = 0; i < total; i += 1) {
         particles.push({
           x: Math.random() * rect.width,
@@ -81,13 +86,15 @@ export default function ParticleBackground({
 
         ctx.beginPath()
         ctx.fillStyle = `rgba(${color}, ${Math.max(0.16, Math.min(0.82, particle.alpha))})`
-        ctx.shadowColor = `rgba(${color}, 0.55)`
-        ctx.shadowBlur = variant === "stars" ? 12 : 8
+        if (!lightMode) {
+          ctx.shadowColor = `rgba(${color}, 0.55)`
+          ctx.shadowBlur = variant === "stars" ? 12 : 8
+        }
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fill()
       }
 
-      if (variant !== "stars") {
+      if (variant !== "stars" && !lightMode) {
         ctx.shadowBlur = 0
         for (let i = 0; i < particles.length; i += 1) {
           for (let j = i + 1; j < particles.length; j += 1) {
@@ -109,16 +116,44 @@ export default function ParticleBackground({
       }
 
       frame += 1
+      if (running) {
+        raf = window.requestAnimationFrame(draw)
+      }
+    }
+
+    function start() {
+      if (running) return
+      running = true
       raf = window.requestAnimationFrame(draw)
+    }
+
+    function stop() {
+      running = false
+      window.cancelAnimationFrame(raf)
     }
 
     resize()
     seed()
-    draw()
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            start()
+          } else {
+            stop()
+          }
+        })
+      },
+      { rootMargin: "120px" }
+    )
+    observer.observe(canvas)
+
     window.addEventListener("resize", resize)
 
     return () => {
-      window.cancelAnimationFrame(raf)
+      observer.disconnect()
+      stop()
       window.removeEventListener("resize", resize)
     }
   }, [density, variant])
