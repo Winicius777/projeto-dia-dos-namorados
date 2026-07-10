@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
-import { useMemo, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { useMemo, useRef, useState } from "react"
+import type { ReactNode } from "react"
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, Heart, Sparkles } from "lucide-react"
 import BreathingEffect from "@/components/animations/BreathingEffect"
 import Fireworks from "@/components/animations/Fireworks"
@@ -164,6 +165,21 @@ function Gallery() {
   )
 }
 
+function CameraFrame({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const scale = useTransform(scrollYProgress, [0, 0.3, 0.72, 1], [0.93, 1, 1, 0.965])
+  const y = useTransform(scrollYProgress, [0, 1], [90, -90])
+  const opacity = useTransform(scrollYProgress, [0, 0.16, 0.86, 1], [0.25, 1, 1, 0.3])
+  const rotateX = useTransform(scrollYProgress, [0, 0.3, 0.75, 1], [4.5, 0, 0, -3])
+
+  return (
+    <motion.div ref={ref} className="camera-frame" style={{ scale, y, opacity, rotateX }}>
+      {children}
+    </motion.div>
+  )
+}
+
 function CinematicChapter({ chapter }: { chapter: BookChapter }) {
   const visualClass = chapterClasses[chapter.number - 1] ?? "chapter-section"
   const id = `ch${String(chapter.number).padStart(2, "0")}`
@@ -171,6 +187,7 @@ function CinematicChapter({ chapter }: { chapter: BookChapter }) {
   return (
     <section id={id} data-chapter={id} className={`chapter-section cinematic-chapter ${visualClass}`}>
       <ChapterAtmosphere number={chapter.number} />
+      <CameraFrame>
       <div className="chapter-inner">
         <motion.div
           variants={fadeUp}
@@ -184,6 +201,7 @@ function CinematicChapter({ chapter }: { chapter: BookChapter }) {
         <ChapterText chapter={chapter} />
         {chapter.number === 5 ? <Gallery /> : null}
       </div>
+      </CameraFrame>
     </section>
   )
 }
