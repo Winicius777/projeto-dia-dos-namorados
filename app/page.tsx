@@ -9,6 +9,7 @@ import Fireworks from "@/components/animations/Fireworks"
 import HeartExplosion from "@/components/animations/HeartExplosion"
 import StarlightEffect from "@/components/animations/StarlightEffect"
 import CustomCursor from "@/components/ui/CustomCursor"
+import EntryQuiz from "@/components/EntryQuiz"
 import ChapterIndicator from "@/components/ui/ChapterIndicator"
 import ParticleBackground from "@/components/ui/ParticleBackground"
 import SoundToggle from "@/components/ui/SoundToggle"
@@ -245,6 +246,7 @@ function FinalExperience() {
 }
 
 export default function HomePage() {
+  const [entered, setEntered] = useState(false)
   const [started, setStarted] = useState(false)
   const indicatorItems = useMemo(
     () => [
@@ -262,6 +264,9 @@ export default function HomePage() {
     <main className="story-shell">
       <CustomCursor />
       <SoundToggle />
+      {!entered ? (
+        <EntryQuiz onComplete={() => setEntered(true)} />
+      ) : (
       <AnimatePresence mode="wait">
         {!started ? (
           <OpeningExperience key="opening" onStart={() => setStarted(true)} />
@@ -281,6 +286,7 @@ export default function HomePage() {
           </motion.div>
         )}
       </AnimatePresence>
+      )}
     </main>
   )
 }
