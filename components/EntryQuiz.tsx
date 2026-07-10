@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowRight, Heart } from "lucide-react"
 import ParticleBackground from "@/components/ui/ParticleBackground"
+import { startPlaylist } from "@/lib/playlist"
 
 const STORAGE_KEY = "mariwini-entry-quiz"
 
@@ -74,6 +75,7 @@ export default function EntryQuiz({ onComplete }: QuizProps) {
 
   function finish() {
     persist(answers, true)
+    startPlaylist()
     setLeaving(true)
     window.setTimeout(onComplete, 720)
   }
