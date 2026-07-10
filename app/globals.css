@@ -2013,3 +2013,45 @@ a {
     animation: none;
   }
 }
+
+/* ===== Otimizações para celular ===== */
+
+@media (max-width: 820px), (pointer: coarse) {
+  .entry-quiz-card {
+    backdrop-filter: none;
+    background: linear-gradient(160deg, rgba(17, 17, 17, 0.94), rgba(20, 13, 16, 0.96));
+  }
+
+  body::before {
+    display: none;
+  }
+
+  .cinematic-chapter::before {
+    animation: none;
+    opacity: 0.55;
+  }
+
+  .camera-frame {
+    will-change: auto;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .cinematic-chapter,
+  .camera-frame {
+    perspective: none;
+  }
+
+  .entry-quiz-progress-fill {
+    animation: none;
+    background: linear-gradient(90deg, var(--color-rose), var(--color-gold-light));
+  }
+
+  .chapter-title {
+    text-shadow: none;
+  }
+
+  .custom-cursor {
+    display: none;
+  }
+}
