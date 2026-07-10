@@ -15,7 +15,7 @@ import ChapterIndicator from "@/components/ui/ChapterIndicator"
 import ParticleBackground from "@/components/ui/ParticleBackground"
 import SoundToggle from "@/components/ui/SoundToggle"
 import TransitionOverlay from "@/components/ui/TransitionOverlay"
-import { fadeUp, scaleIn, staggerChildren } from "@/lib/animations"
+import { fadeUp, scaleIn } from "@/lib/animations"
 import { chapters, coverImage, finalLines, galleryPhotos } from "@/lib/bookData"
 
 function paragraphs(body: string) {
@@ -116,19 +116,19 @@ function ChapterAtmosphere({ number }: { number: number }) {
 
 function ChapterText({ chapter }: { chapter: BookChapter }) {
   const content = (
-    <motion.div
-      className="cinematic-prose"
-      variants={staggerChildren}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.16 }}
-    >
+    <div className="cinematic-prose">
       {paragraphs(chapter.body).map((paragraph, index) => (
-        <motion.p variants={fadeUp} key={`${chapter.number}-${index}`}>
+        <motion.p
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+          key={`${chapter.number}-${index}`}
+        >
           {paragraph}
         </motion.p>
       ))}
-    </motion.div>
+    </div>
   )
 
   if (chapter.number === 10) {
@@ -140,16 +140,16 @@ function ChapterText({ chapter }: { chapter: BookChapter }) {
 
 function Gallery() {
   return (
-    <motion.div
-      className="memory-gallery cinematic-gallery"
-      variants={staggerChildren}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.12 }}
-      aria-label="Álbum de fotos"
-    >
+    <div className="memory-gallery cinematic-gallery" aria-label="Álbum de fotos">
       {galleryPhotos.map((photo) => (
-        <motion.article className="memory-photo-card cinematic-photo-card" variants={scaleIn} key={photo.src}>
+        <motion.article
+          className="memory-photo-card cinematic-photo-card"
+          variants={scaleIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          key={photo.src}
+        >
           <div className="memory-photo-frame">
             <Image
               src={photo.src}
@@ -161,7 +161,7 @@ function Gallery() {
           </div>
         </motion.article>
       ))}
-    </motion.div>
+    </div>
   )
 }
 
